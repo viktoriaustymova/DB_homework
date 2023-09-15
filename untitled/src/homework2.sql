@@ -1,11 +1,11 @@
 --Задача 1. Вывести название и стоимость в USD одного самого дорогого проданного товара
 
 SELECT
-    ProductName,
-    Price AS Price_usd
-FROM Products
-ORDER BY Price DESC
-    LIMIT 1 OFFSET 1
+    Products.ProductName,
+    Products.Price * 1.07  AS Price_usd
+FROM OrderDetails
+ORDER BY Products.Price DESC
+LIMIT 1
 
 --Задача 2. Вывести два самых дорогих товара из категории Beverages из USA
 
@@ -17,7 +17,7 @@ WHERE
   CategoryName = 'Beverages'
 AND
   Country = 'USA'
-ORDER BY Price DESC
+ORDER BY Products.Price DESC
 LIMIT 2
 
 --Задача 3. Удалить товары с ценой менее 5 EUR
@@ -27,12 +27,16 @@ WHERE Price < 5
 
 --Задача 4. Вывести список стран, которые поставляют морепродукты
 
-SELECT
-    Country
-FROM Suppliers
-JOIN Categories ON Suppliers.SupplierID=Categories.CategoryID
+SELECT DISTINCT
+    Suppliers.Country
+
+FROM Products
+
+         JOIN Suppliers ON Products.SupplierID=Suppliers.SupplierID
+         JOIN Categories ON Products.CategoryID=Categories.CategoryID
+
 WHERE
-   CategoryName = 'Seafood'
+        Categories.CategoryName='Seafood'
 
 --Задача 5. Очистить поле ContactName у всех клиентов не из China
 
